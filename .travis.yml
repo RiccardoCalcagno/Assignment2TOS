@@ -14,3 +14,6 @@ cache:
 script:
   - cd icecream-shop-manager
   - mvn clean install
+
+after_success:
+  - mvn clean test jacoco:report coveralls:report -DTOS_ASSIGN2_CVRLS_TOKEN=$TOS_ASSIGN2_CVRLS_TOKEN

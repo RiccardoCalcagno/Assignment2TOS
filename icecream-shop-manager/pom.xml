@@ -12,6 +12,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <TOS_ASSIGN2_CVRLS_TOKEN></TOS_ASSIGN2_CVRLS_TOKEN>    <!--x possibili valori di default-->
   </properties>
 
   <dependencies>
@@ -74,6 +75,14 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.eluder.coveralls</groupId>
+        <artifactId>coveralls-maven-plugin</artifactId>
+        <version>4.3.0</version>
+        <configuration>
+          <repoToken>${TOS_ASSIGN2_CVRLS_TOKEN}</repoToken>
+        </configuration>
       </plugin>
     </plugins>
   </build>
