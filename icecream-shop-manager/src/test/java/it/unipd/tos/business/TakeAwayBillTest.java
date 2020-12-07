@@ -94,5 +94,48 @@ public class TakeAwayBillTest{
                 
         assertNotEquals(20.5D,bill.getOrderPrice(lista, u1),0.000001);
     }
+    
+    
+    /*
+     * TERZO REQUISITO
+     */
+    
+    @Test
+    public void testScontoSeImportoDiGelatiEBudiniSupera50_superaI50() {
+  //il caso con meno di 50€ di spesa di gelati e budini viene preso in considerazione dal caso Generale
+        
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Budino, 25D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 10D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Budino, 17D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Bevanda, 15D));
+       
+        assertEquals(60.3D, bill.getOrderPrice(lista,u1), 0.000001);
+    }
+    @Test
+    public void testScontoSeImportoDiGelatiEBudiniSupera50_inferioreA50MaOrdineTotaleSuperioreA50() {
+        
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 10D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Budino, 20D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Bevanda, 25D));
+       
+        assertNotEquals(49.5D, bill.getOrderPrice(lista,u1), 0.000001);    
+        //asserisci che non sia uguale al prezzo scontato del 10%
+    }
+    @Test
+    public void testScontoPiùDi5GelatiEImportoOrdinazioniGelatiBudiniSuperioreA50() {
+        //Ho interpretato il requisito in questa maniera: si calcola il totale e questo
+        //è il punto di partenza per entrambe le condizioni dei possibili sconti, quindi 
+        // prima applico lo sconto dei "5 Gelati" poi anche quello dei 50€
+        
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Budino, 7D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 10D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 10D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 10D));    
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 5D));     
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 5D));     
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 4D));
+        
+        assertEquals(44.1D, bill.getOrderPrice(lista,u1), 0.000001);
+    }
 
 }

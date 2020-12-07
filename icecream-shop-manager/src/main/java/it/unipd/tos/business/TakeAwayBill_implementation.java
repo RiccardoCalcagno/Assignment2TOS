@@ -38,6 +38,25 @@ public class TakeAwayBill_implementation implements TakeAwayBill {
         }
         return totalPrice;
     }
+    
+    private double scontoPiùDI50GelatiBudini(double totalPrice, List<MenuItem> itemsOrdered) {
+        /*
+         * TERZO REQUISITO: Più di 50 tra Gelati e Budini
+         */
+
+        double gelatiBudiniTotal = 0;
+
+        for (MenuItem item : itemsOrdered) {
+            if ((item.getType() == ItemType.Gelato) || (item.getType() == ItemType.Budino)) {
+                gelatiBudiniTotal += item.getPrice();
+            }
+        }
+
+        if (gelatiBudiniTotal > 50D) {
+            totalPrice *= 0.9D;
+        }
+        return totalPrice;
+    }
 
     @Override
     public double getOrderPrice(List<MenuItem> itemsOrdered, User user) throws TakeAwayBillException {
@@ -59,6 +78,8 @@ public class TakeAwayBill_implementation implements TakeAwayBill {
         
         
         totalPrice = sconto5Gelati(totalPrice, itemsOrdered);
+        
+        totalPrice = scontoPiùDI50GelatiBudini(totalPrice, itemsOrdered);
         
 
         return totalPrice;
