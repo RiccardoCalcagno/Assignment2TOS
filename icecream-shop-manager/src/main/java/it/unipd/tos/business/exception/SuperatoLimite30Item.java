@@ -4,13 +4,12 @@
 
 package it.unipd.tos.business.exception;
 
-public class TakeAwayBillException extends RuntimeException {
+public class SuperatoLimite30Item extends TakeAwayBillException {
 
-    static final long serialVersionUID = 1L;
+    static final long serialVersionUID = 3L;
 
-    public TakeAwayBillException(){}
-
-    public TakeAwayBillException(String msg) {
+    public SuperatoLimite30Item(String msg) {
          super(msg);
-    }
+    }  
+
 }

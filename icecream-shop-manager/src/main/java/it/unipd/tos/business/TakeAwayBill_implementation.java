@@ -5,6 +5,7 @@
 package it.unipd.tos.business;
 
 import it.unipd.tos.business.exception.OrdineNullo;
+import it.unipd.tos.business.exception.SuperatoLimite30Item;
 import it.unipd.tos.business.exception.TakeAwayBillException;
 import it.unipd.tos.model.MenuItem;
 import it.unipd.tos.model.ItemType;
@@ -58,6 +59,17 @@ public class TakeAwayBill_implementation implements TakeAwayBill {
         return totalPrice;
     }
 
+    private void limiteSuperiore(List<MenuItem> itemsOrdered) throws TakeAwayBillException {
+        /*
+         * QUARTO REQUISITO: Limite Superiore 30 items
+         */
+
+        if (itemsOrdered.size() > 30) {
+            throw (new SuperatoLimite30Item("Inseriti più di 30 items"));
+        }
+    }
+    
+    
     @Override
     public double getOrderPrice(List<MenuItem> itemsOrdered, User user) throws TakeAwayBillException {
 
@@ -80,6 +92,8 @@ public class TakeAwayBill_implementation implements TakeAwayBill {
         totalPrice = sconto5Gelati(totalPrice, itemsOrdered);
         
         totalPrice = scontoPiùDI50GelatiBudini(totalPrice, itemsOrdered);
+        
+        limiteSuperiore(itemsOrdered);
         
 
         return totalPrice;

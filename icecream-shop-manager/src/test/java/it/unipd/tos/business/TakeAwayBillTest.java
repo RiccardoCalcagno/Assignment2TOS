@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import it.unipd.tos.business.exception.OrdineNullo;
+import it.unipd.tos.business.exception.SuperatoLimite30Item;
 
 import org.junit.Before;
 
@@ -104,19 +105,19 @@ public class TakeAwayBillTest{
     public void testScontoSeImportoDiGelatiEBudiniSupera50_superaI50() {
   //il caso con meno di 50€ di spesa di gelati e budini viene preso in considerazione dal caso Generale
         
-        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Budino, 25D));
-        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 10D));
-        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Budino, 17D));
-        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Bevanda, 15D));
+        lista.add(new MenuItem("NomeSPDG", ItemType.Budino, 25D));
+        lista.add(new MenuItem("NomeSPDG", ItemType.Gelato, 10D));
+        lista.add(new MenuItem("NomeSPDG", ItemType.Budino, 17D));
+        lista.add(new MenuItem("NomeSPDG", ItemType.Bevanda, 15D));
        
         assertEquals(60.3D, bill.getOrderPrice(lista,u1), 0.000001);
     }
     @Test
     public void testScontoSeImportoDiGelatiEBudiniSupera50_inferioreA50MaOrdineTotaleSuperioreA50() {
         
-        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 10D));
-        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Budino, 20D));
-        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Bevanda, 25D));
+        lista.add(new MenuItem("NomeSPDG", ItemType.Gelato, 10D));
+        lista.add(new MenuItem("NomeSPDG", ItemType.Budino, 20D));
+        lista.add(new MenuItem("NomeSPDG", ItemType.Bevanda, 25D));
        
         assertNotEquals(49.5D, bill.getOrderPrice(lista,u1), 0.000001);    
         //asserisci che non sia uguale al prezzo scontato del 10%
@@ -127,15 +128,30 @@ public class TakeAwayBillTest{
         //è il punto di partenza per entrambe le condizioni dei possibili sconti, quindi 
         // prima applico lo sconto dei "5 Gelati" poi anche quello dei 50€
         
-        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Budino, 7D));
-        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 10D));
-        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 10D));
-        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 10D));    
-        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 5D));     
-        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 5D));     
-        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 4D));
+        lista.add(new MenuItem("NomeSPDG", ItemType.Budino, 7D));
+        lista.add(new MenuItem("NomeSPDG", ItemType.Gelato, 10D));
+        lista.add(new MenuItem("NomeSPDG", ItemType.Gelato, 10D));
+        lista.add(new MenuItem("NomeSPDG", ItemType.Gelato, 10D));    
+        lista.add(new MenuItem("NomeSPDG", ItemType.Gelato, 5D));     
+        lista.add(new MenuItem("NomeSPDG", ItemType.Gelato, 5D));     
+        lista.add(new MenuItem("NomeSPDG", ItemType.Gelato, 4D));
         
         assertEquals(44.1D, bill.getOrderPrice(lista,u1), 0.000001);
+    }
+    
+    /*
+     * QUARTO REQUISITO
+     */
+    
+    @Test(expected=SuperatoLimite30Item.class)
+    public void testLimiteDi30Elementi_limiteSuperato() {
+        //il caso con meno di 31 elementi viene preso in considerazione dal caso Generale
+        
+        for(int i=0; i<31; i++) {
+            lista.add(new MenuItem("NomeSPDG", ItemType.Budino, 1D));
+        }
+        
+        bill.getOrderPrice(lista, u1);
     }
 
 }
