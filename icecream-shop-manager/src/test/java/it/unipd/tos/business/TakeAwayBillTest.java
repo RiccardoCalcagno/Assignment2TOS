@@ -153,5 +153,20 @@ public class TakeAwayBillTest{
         
         bill.getOrderPrice(lista, u1);
     }
+    
+    
+    /*
+     * QUINTO REQUISITO
+     */
+    
+    @Test
+    public void testCommissioneSeImportoInsufficiente_èInsufficiente() {
+        //il caso con spesa più di 10€ viene preso in considerazione dal caso Generale
+        
+        lista.add(new MenuItem("NomeSPDG", ItemType.Budino, 3D));
+        lista.add(new MenuItem("NomeSPDG", ItemType.Bevanda, 5D));
+       
+        assertEquals(8.5, bill.getOrderPrice(lista,u1), 0.000001);
+    }
 
 }

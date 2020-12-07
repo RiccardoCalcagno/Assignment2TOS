@@ -69,6 +69,17 @@ public class TakeAwayBill_implementation implements TakeAwayBill {
         }
     }
     
+    private double commissioneLimiteInferiore(double totalPrice) {
+        /*
+         * QUINTO REQUISITO: Commissione se inferiore a 10€
+         */
+
+        if (totalPrice < 10D) {
+            totalPrice += 0.5D;
+        }
+        return totalPrice;
+    }
+    
     
     @Override
     public double getOrderPrice(List<MenuItem> itemsOrdered, User user) throws TakeAwayBillException {
@@ -94,6 +105,8 @@ public class TakeAwayBill_implementation implements TakeAwayBill {
         totalPrice = scontoPiùDI50GelatiBudini(totalPrice, itemsOrdered);
         
         limiteSuperiore(itemsOrdered);
+        
+        totalPrice = commissioneLimiteInferiore(totalPrice);
         
 
         return totalPrice;
