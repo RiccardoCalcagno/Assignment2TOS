@@ -7,13 +7,9 @@
   <module name="TreeWalker">
 
     <module name="BooleanExpressionComplexity">
-      <property name="max" value="4"/>
     </module>
 
-    <module name="CyclomaticComplexity">
-      <property name="max" value="8"/>
-      <property name="switchBlockAsSingleDecisionPoint" value="true"/>
-    </module>
+    <module name="CyclomaticComplexity"/>
 
     <module name="EmptyCatchBlock"/>
 
@@ -26,18 +22,14 @@
 
     <module name="NeedBraces"/>
 
-    <module name="MethodLength">
-      <property name="max" value="200"/>
-    </module>
+    <module name="MethodLength"/>
 
   </module>
 
-  <module name="FileLength">
-    <property name="max" value="1500"/>
-  </module>
+  <module name="FileLength"/>
 
   <module name="LineLength">
-    <property name="max" value="120"/>
+    <property name="max" value="110"/>
   </module>
 
   <module name="FileTabCharacter"/>
