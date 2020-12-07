@@ -8,6 +8,7 @@ import it.unipd.tos.model.User;
 import it.unipd.tos.model.ItemType;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class TakeAwayBillTest{
         u1 = new User("NomeSPDG","CognomeSPDG",21);
         lista = new  ArrayList<MenuItem>();
         bill = new TakeAwayBill_implementation();
-    }   
+    }
     
     /*
      * PRIMO REQUISITO
@@ -61,5 +62,37 @@ public class TakeAwayBillTest{
         assertEquals(11.5D,bill.getOrderPrice(lista, u1),0.000001);
     }
 
+    
+    /*
+     * SECONDO REQUISITO
+     */
+    
+
+    @Test
+    public void testScontoSePiùDi5Gelati_conPiùDi5Gelati() {
+        //il caso con meno di 6 gelati viene preso in considerazione dal caso Generale
+        
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 4D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 4.5D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 3D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 2D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 3D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 3.5D));
+                
+        assertEquals(19D,bill.getOrderPrice(lista, u1),0.000001);
+    }
+    @Test
+    public void testScontoSePiùDi5Gelati_conPiùDi5GelatiEUnAltroTipoMenoCostosoDelResto() {
+        
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Budino, 1D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 4D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 4.5D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 3D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 2D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 3D));
+        lista.add(new MenuItem("NomeSenzaPerditaDiGeneralità", ItemType.Gelato, 3.5D));
+                
+        assertNotEquals(20.5D,bill.getOrderPrice(lista, u1),0.000001);
+    }
 
 }
