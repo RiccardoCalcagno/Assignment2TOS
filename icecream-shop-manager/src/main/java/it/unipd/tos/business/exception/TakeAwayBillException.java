@@ -9,8 +9,9 @@ public class TakeAwayBillException extends RuntimeException {
     static final long serialVersionUID = 1L;
 
     public TakeAwayBillException(){}
-
+    /*
     public TakeAwayBillException(String msg) {
          super(msg);
     }
+    */
 }
