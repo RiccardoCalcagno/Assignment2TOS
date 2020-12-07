@@ -1,0 +1,11 @@
+////////////////////////////////////////////////////////////////////
+// Riccardo Calcagno 1193479
+////////////////////////////////////////////////////////////////////
+
+package it.unipd.tos.business.exception;
+
+public class OrdiniInsufficientiPerRegali extends TakeAwayBillException {
+
+    static final long serialVersionUID = 4L;
+
+}

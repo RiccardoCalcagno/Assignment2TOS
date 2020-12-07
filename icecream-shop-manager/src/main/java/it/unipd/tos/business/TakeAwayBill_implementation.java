@@ -13,8 +13,14 @@ import it.unipd.tos.model.User;
 
 import java.util.List;
 
+import java.time.LocalTime;
+import java.util.ArrayList;
+import it.unipd.tos.model.Order;
+import java.util.Random;
+import it.unipd.tos.business.exception.OrdiniInsufficientiPerRegali;
+
 public class TakeAwayBill_implementation implements TakeAwayBill {
-    
+
     private double sconto5Gelati(double totalPrice, List<MenuItem> itemsOrdered) {
         /*
          * SECONDO REQUISITO: Sconto dei 5 Gelati 
@@ -39,7 +45,7 @@ public class TakeAwayBill_implementation implements TakeAwayBill {
         }
         return totalPrice;
     }
-    
+
     private double scontoPiùDI50GelatiBudini(double totalPrice, List<MenuItem> itemsOrdered) {
         /*
          * TERZO REQUISITO: Più di 50 tra Gelati e Budini
@@ -68,7 +74,7 @@ public class TakeAwayBill_implementation implements TakeAwayBill {
             throw (new SuperatoLimite30Item("Inseriti più di 30 items"));
         }
     }
-    
+
     private double commissioneLimiteInferiore(double totalPrice) {
         /*
          * QUINTO REQUISITO: Commissione se inferiore a 10€
@@ -79,8 +85,7 @@ public class TakeAwayBill_implementation implements TakeAwayBill {
         }
         return totalPrice;
     }
-    
-    
+
     @Override
     public double getOrderPrice(List<MenuItem> itemsOrdered, User user) throws TakeAwayBillException {
 
@@ -98,17 +103,102 @@ public class TakeAwayBill_implementation implements TakeAwayBill {
 
             totalPrice += item.getPrice();
         }
-        
-        
+
         totalPrice = sconto5Gelati(totalPrice, itemsOrdered);
-        
+
         totalPrice = scontoPiùDI50GelatiBudini(totalPrice, itemsOrdered);
-        
+
         limiteSuperiore(itemsOrdered);
-        
+
         totalPrice = commissioneLimiteInferiore(totalPrice);
-        
 
         return totalPrice;
     }
+
+
+    /*
+    * SESTO REQUISITO: Regalo a 10 ragazzi puntuali
+    */
+
+    private LocalTime currentTime;
+
+    private List<Order> listaOrdini;
+
+    public TakeAwayBill_implementation() {
+
+        currentTime = LocalTime.of(0, 0, 0);
+        listaOrdini = new ArrayList<Order>();
+    }
+
+    @Override
+    public LocalTime getCurrentTime() {
+        return currentTime;
+    }
+
+    @Override
+    public void setCurrentTime(LocalTime t) {
+        currentTime = t;
+    }
+
+    @Override
+    public List<Order> getListaOrdini() {
+        return listaOrdini;
+    }
+
+    @Override
+    public void addOrder(List<MenuItem> itemsOrdered, User user) {
+
+        Order o = new Order(user, itemsOrdered, currentTime, getOrderPrice(itemsOrdered, user));
+
+        listaOrdini.add(o);
+    }
+
+    private boolean isValidoPerRegalo(Order ordine, List<Order> ordiniPapabili) {
+        boolean valido = true;
+
+        for (Order o : ordiniPapabili) {
+            if (o.getUser().getName() == ordine.getUser().getName()) {
+                if (o.getUser().getSurname() == ordine.getUser().getSurname()) {
+                    valido = false;
+                }
+            }
+        }
+        if ((ordine.getUser().getAge() >= 18) || (ordine.getOrderTime().isAfter(LocalTime.of(19, 0, 0)))
+                || (ordine.getOrderTime().isBefore(LocalTime.of(18, 0, 0)))) {
+            valido = false;
+        }
+
+        return valido;
+    }
+
+    @Override
+    public void regalaOrdini() {
+
+        List<Order> ordiniPapabili = new ArrayList<Order>();
+
+        for (Order ordine : listaOrdini) {
+
+            if (isValidoPerRegalo(ordine, ordiniPapabili)) {
+                ordiniPapabili.add(ordine);
+            }
+        }
+        int x = 0;
+        if (ordiniPapabili.size() > 9) {
+            Random randomizer = new Random();
+
+            for (int i = 0; i < 10; i++) {
+
+                x = randomizer.nextInt(ordiniPapabili.size());
+
+                Order selezionato = ordiniPapabili.remove(x);
+
+                selezionato.setFinalPrice(0);
+            }
+        } else {
+
+            throw (new OrdiniInsufficientiPerRegali());
+        }
+    }
+
 }
+

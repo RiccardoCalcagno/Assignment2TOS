@@ -168,5 +168,13 @@ public class TakeAwayBillTest{
        
         assertEquals(8.5, bill.getOrderPrice(lista,u1), 0.000001);
     }
+    
+    
+    /*
+     * SESTO REQUISITO
+     */
+    
+    // VEDI Classe di Test:  TkAwyBllSestoRequisito.java
+    
 
 }
